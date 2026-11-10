@@ -1,0 +1,29 @@
+Package: mediaPlanCopula
+Type: Package
+Title: Copula-Based Exposure Distributions for Mixed Media Plans
+Version: 0.1.0
+Authors@R: 
+    person(given = "Manuel J.", family = "Sánchez-Franco",
+           email = "majesus@us.es", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-8042-3550"))
+Description: Computes the distribution of the number of contacts, the reach and
+    the average opportunities to see of a media plan that mixes vehicles with a
+    bounded number of insertions (Beta-Binomial) and vehicles with an unbounded
+    stream of impressions (Negative Binomial, as a Poisson-Gamma mixture). The
+    vehicles are linked by a Gaussian copula on their latent exposure
+    propensities, whose correlation matrix is calibrated pairwise, by
+    numerical quadrature, to reproduce the observed duplication of the
+    first insertions. Copula models for marketing data are described by
+    Danaher and Smith (2011) <doi:10.1287/mksc.1090.0491>; multivariate media
+    exposure models by Danaher (1991) <doi:10.1177/002224379102800311>.
+License: MIT + file LICENSE
+URL: https://github.com/majesus/mediaPlanCopula
+BugReports: https://github.com/majesus/mediaPlanCopula/issues
+Depends: R (>= 4.0)
+Imports: stats
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-US
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
