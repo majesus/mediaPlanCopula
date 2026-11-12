@@ -94,11 +94,14 @@ The reach of one and two insertions and the duplication do not determine the
 distribution of contacts. The shape beyond them comes from the assumptions of the
 model: Beta or Gamma propensities, a Gaussian copula, and exchangeable
 insertions within a vehicle. Models with the same inputs and different
-assumptions give different distributions, and comparisons with other
-multivehicle models on survey-derived data showed small differences in accuracy
-that were not stable out of sample. The model is therefore offered as an
-implementation that is available for every plan and that reports its own
-calibration error, and not as a more accurate alternative to other models.
+assumptions give different distributions. Its accuracy relative to other
+multivehicle models depends on the mechanism that generates the data: in
+simulations the advantage varied across mechanisms, and on survey-derived data
+the differences were of a few thousandths of total variation distance and, out
+of sample, not distinguishable from sampling noise. The model is therefore
+offered as an implementation that is available for every plan and that reports
+its own calibration error, and not as a more accurate alternative to other
+models.
 
 To study how a model behaves under mechanisms with a known truth, see the
 `mediaPlanSim` package, which generates synthetic exposure data and the true

@@ -36,10 +36,12 @@ fit$diagnostics   # calibration errors and whether the correlation matrix was ad
 * The reach of one and two insertions and the duplication do not determine the
   distribution of contacts; its shape comes from the model's assumptions. Other
   multivehicle models with the same inputs give other distributions.
-* In comparisons with other multivehicle models on survey-derived data, differences
-  in accuracy were small and not stable out of sample. The function is offered as
-  an implementation available for every plan, with explicit diagnostics, and not
-  as a more accurate alternative.
+* Its accuracy relative to other multivehicle models depends on the mechanism that
+  generates the data: in simulations the advantage varied across mechanisms, and on
+  survey-derived data the differences were of a few thousandths of total variation
+  distance and, out of sample, not distinguishable from sampling noise. The
+  function is offered as an implementation available for every plan, with explicit
+  diagnostics, and not as a more accurate alternative.
 
 The companion package [mediaPlanSim](https://github.com/majesus/mediaPlanSim)
 generates synthetic exposure data with a known truth to study how models behave.

@@ -66,11 +66,14 @@
 #' determine the distribution of contacts: the shape of the distribution beyond
 #' them comes from the assumptions of the model (Beta or Gamma propensities, a
 #' Gaussian copula, and exchangeable insertions within a vehicle), and models
-#' with the same inputs and other assumptions give other distributions. In
-#' comparisons with other multivehicle models on survey-derived data the
-#' differences in accuracy were small and not stable out of sample, so the
-#' choice of model should rest on its assumptions and on the diagnostics, not on
-#' a presumption of higher accuracy.
+#' with the same inputs and other assumptions give other distributions. The
+#' accuracy of the model relative to other multivehicle models depends on the
+#' mechanism that generates the data: in simulations its advantage varied across
+#' mechanisms, and on survey-derived data the differences were of a few
+#' thousandths of total variation distance and, out of sample, not
+#' distinguishable from sampling noise. The choice of model should therefore
+#' rest on its assumptions and on the diagnostics, not on a presumption of
+#' higher accuracy.
 #'
 #' @param r1 Numeric vector with the reach of one insertion (one unit block)
 #'   of each vehicle.
