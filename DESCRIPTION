@@ -21,7 +21,8 @@ URL: https://github.com/majesus/mediaPlanCopula
 BugReports: https://github.com/majesus/mediaPlanCopula/issues
 Depends: R (>= 4.0)
 Imports: stats
-Suggests: testthat (>= 3.0.0)
+Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
+VignetteBuilder: knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US

@@ -55,6 +55,23 @@
 #' `scale`. The scale is never guessed: with `scale = "proportion"` any value
 #' above one is an error.
 #'
+#' **Limitations.** The reach of one and of two insertions of each vehicle is
+#' reproduced exactly, and the expected number of contacts follows from them.
+#' The duplication of the first insertions is reproduced only approximately,
+#' because the correlations are calibrated one pair at a time; when the
+#' calibrated matrix is not positive definite it is adjusted, and the size of the
+#' deviation is reported in `diagnostics$dup_error`. This happens more often as
+#' the number of vehicles grows and when the duplications come from observed
+#' data. The reach of one and two insertions and the duplication do not
+#' determine the distribution of contacts: the shape of the distribution beyond
+#' them comes from the assumptions of the model (Beta or Gamma propensities, a
+#' Gaussian copula, and exchangeable insertions within a vehicle), and models
+#' with the same inputs and other assumptions give other distributions. In
+#' comparisons with other multivehicle models on survey-derived data the
+#' differences in accuracy were small and not stable out of sample, so the
+#' choice of model should rest on its assumptions and on the diagnostics, not on
+#' a presumption of higher accuracy.
+#'
 #' @param r1 Numeric vector with the reach of one insertion (one unit block)
 #'   of each vehicle.
 #' @param r2 Numeric vector with the reach of two insertions (two unit blocks).

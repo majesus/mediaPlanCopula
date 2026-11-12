@@ -1,0 +1,105 @@
+---
+title: "Using mediaPlanCopula: calibration, diagnostics and limits"
+author: "Manuel J. Sánchez-Franco"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using mediaPlanCopula: calibration, diagnostics and limits}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(mediaPlanCopula)
+```
+
+## What the model does
+
+`distrib_hybrid_copula()` returns the distribution of the total number of
+contacts of a plan from, for each vehicle, the reach of one insertion (`r1`) and
+of two insertions (`r2`), the number of insertions, and optionally the
+duplication of the first insertions between vehicles. A vehicle with a bounded
+number of insertions has a Beta-Binomial marginal (`"bbd"`) and a vehicle that
+delivers an unbounded stream of impressions has a Negative Binomial marginal
+(`"nbd"`). A Gaussian copula links the vehicles.
+
+## A mixed plan
+
+```{r mixed}
+fit <- distrib_hybrid_copula(
+  r1 = c(TV = 0.20, Digital = 0.02),
+  r2 = c(TV = 0.312, Digital = 0.0390),
+  insertions = c(5, 50),
+  model_type = c("bbd", "nbd"),
+  dup_matrix = matrix(c(0.20, 0.006, 0.006, 0.02), 2),
+  n_qmc = 1024
+)
+fit
+```
+
+The reach of one and two insertions of each vehicle is reproduced exactly. The
+duplication is calibrated, and the result reports how well:
+
+```{r diag}
+fit$diagnostics$pairs
+c(reach1_error = fit$diagnostics$reach1_error,
+  dup_error = fit$diagnostics$dup_error)
+```
+
+## Numerical accuracy
+
+The distribution is integrated with a deterministic quasi-Monte Carlo sample, so
+it uses no random numbers. The cost and the accuracy depend on `n_qmc`, and the
+accuracy should be checked by comparing two values.
+
+```{r qmc}
+a <- distrib_hybrid_copula(c(A = 0.2, B = 0.15), c(0.312, 0.23925), c(5, 5),
+                           dup_matrix = matrix(c(0.2, 0.05, 0.05, 0.15), 2),
+                           n_qmc = 1024)
+b <- distrib_hybrid_copula(c(A = 0.2, B = 0.15), c(0.312, 0.23925), c(5, 5),
+                           dup_matrix = matrix(c(0.2, 0.05, 0.05, 0.15), 2),
+                           n_qmc = 16384)
+0.5 * sum(abs(a$distribution$pmf - b$distribution$pmf))  # total variation
+```
+
+## When the duplications cannot be matched
+
+With three or more vehicles, the correlations are calibrated pair by pair, and
+the resulting matrix may not be positive definite. The function then adjusts it
+and warns, and the fitted duplications differ from the targets. The same happens
+when a duplication is not attainable by a Gaussian copula with the given
+marginals.
+
+```{r psd}
+d <- matrix(c(.2, .065, .025, .065, .2, .065, .025, .065, .2), 3)
+msg <- character()
+f <- withCallingHandlers(
+  distrib_gcbbd(rep(0.2, 3), rep(0.312, 3), c(3, 3, 3), d, n_qmc = 512),
+  warning = function(w) {
+    msg <<- c(msg, conditionMessage(w))
+    invokeRestart("muffleWarning")
+  })
+msg
+f$diagnostics$psd_adjusted
+round(f$diagnostics$dup_error, 4)
+```
+
+`diagnostics$dup_error` is the largest absolute error in a duplication, in
+proportions. Report it together with any result built on a plan whose
+duplications were adjusted.
+
+## What the inputs do not determine
+
+The reach of one and two insertions and the duplication do not determine the
+distribution of contacts. The shape beyond them comes from the assumptions of the
+model: Beta or Gamma propensities, a Gaussian copula, and exchangeable
+insertions within a vehicle. Models with the same inputs and different
+assumptions give different distributions, and comparisons with other
+multivehicle models on survey-derived data showed small differences in accuracy
+that were not stable out of sample. The model is therefore offered as an
+implementation that is available for every plan and that reports its own
+calibration error, and not as a more accurate alternative to other models.
+
+To study how a model behaves under mechanisms with a known truth, see the
+`mediaPlanSim` package, which generates synthetic exposure data and the true
+distribution of contacts.
